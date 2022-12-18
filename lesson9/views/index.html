@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h3>Form for GET method</h3>
+<form>
+    <label for="userFirstnameGet">Firstname</label><input type="text" id="userFirstnameGet">
+    <label for="userSurnameGet">Surname</label><input type="text" id="userSurnameGet">
+    <label for="userAgeGet">Age</label><input type="text" id="userAgeGet">
+    <label for="userResidenceGet">Residence</label><input type="text" id="userResidenceGet">
+    <br>
+    <input type="button" value="Save" onclick="saveGet()">
+</form>
+
+<h3>Form for POST method</h3>
+<form>
+    <label for="userFirstnamePost">Firstname</label><input type="text" id="userFirstnamePost">
+    <label for="userSurnamePost">Surname</label><input type="text" id="userSurnamePost">
+    <label for="userAgePost">Age</label><input type="text" id="userAgePost">
+    <label for="userResidencePost">Residence</label><input type="text" id="userResidencePost">
+    <br>
+    <input type="button" value="Save" onclick="savePost()">
+</form>
+
+    <script>
+        //1
+
+        userAgeGet.onblur = function () {
+            let age = userAgeGet.value;
+            if (isNaN(age) || age > 100 || age < 1) {
+                document.getElementById('userAgeGet').style.backgroundColor = 'red';
+                userAgeGet.value = 'Error age';
+            }
+        }
+
+        //2 - GET
+
+        function saveGet() {
+            if (userAgeGet.value !== 'Error age') {
+                sendDataByGet();
+            } else {
+                alert('Bad GET request');
+            }
+        }
+
+        function validationByGet(value) {
+            return value + 'ValidatedByGET';
+        }
+
+        function sendDataByGet() {
+            let formData = {
+                formFirstname: validationByGet(document.getElementById('userFirstnameGet').value),
+                formSurname: validationByGet(document.getElementById('userSurnameGet').value),
+                formAge: validationByGet(document.getElementById('userAgeGet').value),
+                formResidence: validationByGet(document.getElementById('userResidenceGet').value)
+            };
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("GET",
+                "/formGet?userFirstname=" + formData.formFirstname +
+                "&userSurname=" + formData.formSurname +
+                "&userAge=" + formData.formAge +
+                "&userResidence=" + formData.formResidence);
+            xhr.setRequestHeader("Content-type", "application/json");
+            xhr.send();
+        }
+
+        //3 - Post
+        userAgePost.onblur = function () {
+            let age = userAgePost.value;
+            if (isNaN(age) || age > 100 || age < 1) {
+                document.getElementById('userAgePost').style.backgroundColor = 'red';
+                userAgePost.value = 'Error age';
+            }
+        }
+
+        function savePost() {
+            if (userAgePost.value !== 'Error age') {
+                sendDataByPost();
+            } else {
+                alert('Bad POST request');
+            }
+        }
+
+        function validationByPost(value) {
+            return value + 'ValidatedByPOST';
+        }
+
+        function sendDataByPost(){
+            let formData = {
+                formFirstname: validationByPost(document.getElementById('userFirstnameGet').value),
+                formSurname: validationByPost(document.getElementById('userSurnameGet').value),
+                formAge: validationByPost(document.getElementById('userAgeGet').value),
+                formResidence: validationByPost(document.getElementById('userResidenceGet').value)
+            };
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", "/formPost");
+            xhr.setRequestHeader("Content-type", "application/json");
+            xhr.send(JSON.stringify(formData));
+        }
+    </script>
+</body>
+</html>
